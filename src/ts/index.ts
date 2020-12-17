@@ -1,3 +1,9 @@
-const hello: string = "hi";
+import { db } from "../config/firebaseConfig";
 
-console.log(hello);
+db.collection("cafes")
+  .get()
+  .then((snapshot: any) => {
+    snapshot.docs.forEach((doc) => {
+      console.log(doc.data());
+    });
+  });

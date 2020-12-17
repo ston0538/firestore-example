@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
- <div>
-   <h1>hi</h1>
- </div> 
-</body>
-<script src="./src/ts/index.ts"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="./src/css/styles.css"
+    />
+    <title>Document</title>
+    <script src="./src/config/firebaseConfig.ts"></script>
+    <script src="./src/ts/index.ts"></script>
+  </head>
+  <body>
+    <div>
+      <h1>Cloud Cafe</h1>
+      <div class="content">
+        <form id="add-cafe-form"></form>
+        <ul id="cafe-list"></ul>
+      </div>
+    </div>
+  </body>
 </html>
