@@ -1,9 +1,4 @@
-import { db } from "../config/firebaseConfig";
+import { renderCafes } from "./cafes";
 
-db.collection("cafes")
-  .get()
-  .then((snapshot: any) => {
-    snapshot.docs.forEach((doc) => {
-      console.log(doc.data());
-    });
-  });
+// render cafe
+renderCafes();
