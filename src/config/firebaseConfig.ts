@@ -12,10 +12,10 @@ firebase.initializeApp(firebaseConfig);
 
 export const db = firebase.firestore();
 
-// if (process.env.NODE_ENV === "development") {
-//   console.log("localhost detected!");
-//   db.settings({
-//     host: "localhost:8080",
-//     ssl: false,
-//   });
-// }
+if (process.env.NODE_ENV === "development") {
+  console.log("localhost detected!");
+  db.settings({
+    host: "localhost:8080",
+    ssl: false,
+  });
+}
