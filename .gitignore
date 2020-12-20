@@ -8,4 +8,5 @@ firestore.indexes.json
 firestore.rules
 ui-debug.log
 .firebaserc
+firestore_export
 .env

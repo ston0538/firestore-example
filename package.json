@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html",
-    "emulator": "firebase emulators:start"
+    "emulator": "firebase emulators:start",
+    "emulator:import": "firebase emulators:start --import=./firestore_export --export-on-exit",
+    "emulator:backup": "firebase emulators:export ./firestore_export"
   },
   "author": "",
   "license": "ISC",
