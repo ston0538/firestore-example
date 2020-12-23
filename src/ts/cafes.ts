@@ -11,7 +11,7 @@ interface FormCafe extends HTMLFormElement {
 }
 const cafeList = document.querySelector("#cafe-list");
 const form: FormCafe = document.querySelector("#add-cafe-form");
-const cafes = firebaseService("cafe");
+const cafes = firebaseService("cafes");
 
 function renderCafe(doc: any) {
   let li = document.createElement("li");
