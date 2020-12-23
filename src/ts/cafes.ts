@@ -13,15 +13,24 @@ const cafeList = document.querySelector("#cafe-list");
 const form: FormCafe = document.querySelector("#add-cafe-form");
 const cafes = firebaseService("cafe");
 
-function renderCafe(data: any) {
+function renderCafe(doc: any) {
   let li = document.createElement("li");
   let name = document.createElement("span");
   let city = document.createElement("span");
-  name.textContent = data.name;
-  city.textContent = data.city;
+  let cross = document.createElement("div");
+
+  name.textContent = doc.data().name;
+  city.textContent = doc.data().city;
+  cross.textContent = "x";
+  li.setAttribute("data-id", doc.id);
   li.appendChild(name);
   li.appendChild(city);
+  li.appendChild(cross);
+
   cafeList.appendChild(li);
+
+  // delete data
+  cross.addEventListener("click", (e) => deleteCafe(e, doc.id));
 }
 
 export function submitCafe() {
@@ -30,13 +39,17 @@ export function submitCafe() {
     console.log(form);
     const city = form.city.value;
     const name = form.shop_name.value;
-    cafes.create({ city, name }).then((result) => {
+    cafes.createData({ city, name }).then((result) => {
       if (result !== null) {
         form.city.value = "";
         form.shop_name.value = "";
       }
     });
   });
+}
+function deleteCafe(event: Event, id: string) {
+  event.stopPropagation();
+  cafes.deleteData(id);
 }
 
 export function renderCafes() {

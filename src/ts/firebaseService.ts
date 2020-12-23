@@ -2,7 +2,8 @@ import { db } from "../config/firebaseConfig";
 
 interface IFirebaseService {
   getDatas: () => Promise<any>;
-  create: ({ data }: any) => Promise<any>;
+  createData: ({ data }: any) => Promise<any>;
+  deleteData: (id: string) => void;
 }
 
 export default function fireBaseService(collection: string): IFirebaseService {
@@ -11,7 +12,7 @@ export default function fireBaseService(collection: string): IFirebaseService {
       db.collection(collection)
         .get()
         .then((snapshot: any) => {
-          const data = snapshot.docs.map((item: any) => item.data());
+          const data = snapshot.docs.map((item: any) => item);
           resolve(data);
         })
         .catch((error) => {
@@ -19,7 +20,7 @@ export default function fireBaseService(collection: string): IFirebaseService {
         });
     });
   };
-  const create = ({ ...data }: any) => {
+  const createData = ({ ...data }: any) => {
     return new Promise((resolve, reject) => {
       db.collection(collection)
         .add(data)
@@ -32,9 +33,13 @@ export default function fireBaseService(collection: string): IFirebaseService {
         });
     });
   };
+  const deleteData = (id: string) => {
+    db.collection(collection).doc(id).delete();
+  };
 
   return Object.freeze({
     getDatas,
-    create,
+    createData,
+    deleteData,
   });
 }
