@@ -1,22 +1,18 @@
 import { db } from "../config/firebaseConfig";
 import firebase from "firebase/app";
 
+export type callback = (
+  changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
+) => void;
+
 interface IFirebaseService {
-  getDatas: (
-    callback: (
-      changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
-    ) => void
-  ) => any;
+  getDatas: (callback: callback) => void;
   createData: ({ data }: any) => Promise<any>;
   deleteData: (id: string) => void;
 }
 
 export default function fireBaseService(collection: string): IFirebaseService {
-  const getDatas = (
-    callback: (
-      changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
-    ) => void
-  ) => {
+  const getDatas = (callback: callback) => {
     db.collection(collection)
       .orderBy("city")
       .onSnapshot((snapshot) => {

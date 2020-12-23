@@ -1,4 +1,4 @@
-import firebaseService from "./firebaseService";
+import firebaseService, { callback } from "./firebaseService";
 import firebase from "firebase/app";
 
 interface ICafe {
@@ -52,9 +52,7 @@ function deleteCafe(event: Event, id: string) {
   cafes.deleteData(id);
 }
 
-function realTime(
-  changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
-) {
+const realTime: callback = function (changes) {
   changes.forEach((change) => {
     if (change.type === "added") {
       console.log(change.doc.data());
@@ -65,7 +63,7 @@ function realTime(
       cafeList.removeChild(li);
     }
   });
-}
+};
 export function renderCafes() {
   cafes.getDatas(realTime);
 }
