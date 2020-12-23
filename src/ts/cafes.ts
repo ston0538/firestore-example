@@ -1,6 +1,5 @@
 import firebaseService from "./firebaseService";
-import firesbase from "firebase";
-import { db } from "../config/firebaseConfig";
+import firebase from "firebase/app";
 
 interface ICafe {
   city: string;
@@ -20,8 +19,8 @@ function renderCafe(doc: any) {
   let city = document.createElement("span");
   let cross = document.createElement("div");
 
-  name.textContent = doc.name;
-  city.textContent = doc.city;
+  name.textContent = doc.data().name;
+  city.textContent = doc.data().city;
   cross.textContent = "x";
   li.setAttribute("data-id", doc.id);
   li.appendChild(name);
@@ -53,22 +52,20 @@ function deleteCafe(event: Event, id: string) {
   cafes.deleteData(id);
 }
 
+function realTime(
+  changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
+) {
+  changes.forEach((change) => {
+    if (change.type === "added") {
+      console.log(change.doc.data());
+      renderCafe(change.doc);
+    }
+    if (change.type === "removed") {
+      let li = cafeList.querySelector("[data-id=" + change.doc.id + "]");
+      cafeList.removeChild(li);
+    }
+  });
+}
 export function renderCafes() {
-  db.collection("cafes")
-  .orderBy("city")
-  .onSnapshot((snapshot) => {
-    let changes = snapshot.docChanges();
-    // console.log(changes);
-   changes.forEach(change=> {
-     if(change.type === "added") {
-       renderCafe(change.doc.data())
-     }
-   }) 
-  // cafes.getDatas().then((data) => {
-  //   data.forEach((item: ICafe) => {
-  //     renderCafe(item);
-  //     // console.log(data);
-  //   });
-  // });
-  // .catch((error) => console.log(error));
+  cafes.getDatas(realTime);
 }
