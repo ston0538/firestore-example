@@ -9,16 +9,29 @@ interface IFirebaseService {
 export default function fireBaseService(collection: string): IFirebaseService {
   const getDatas = () => {
     return new Promise((resolve, reject) => {
+      // db.collection(collection)
+      //   .where("city", "==", "manchester")
+      //   .orderBy("name")
+      //   .get()
+      //   .then((snapshot: any) => {
+      //     const data = snapshot.docs.map((item: any) => item);
+      //     resolve(data);
+      //   })
+      //   .catch((error) => {
+      //     reject(error);
+      //   });
       db.collection(collection)
-        .where("city", "==", "manchester")
-        .orderBy("name")
-        .get()
-        .then((snapshot: any) => {
-          const data = snapshot.docs.map((item: any) => item);
+        .orderBy("city")
+        .onSnapshot((snapshot) => {
+          let changes = snapshot.docChanges();
+          // console.log(changes);
+          const data = changes.map((change) => {
+            if (change.type === "added") {
+              console.log(change.type);
+              return change.doc;
+            }
+          });
           resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
         });
     });
   };
