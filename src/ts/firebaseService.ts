@@ -2,28 +2,45 @@ import { db } from "../config/firebaseConfig";
 import firebase from "firebase/app";
 
 export type callback = (
-  changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[]
+  changes: firebase.firestore.DocumentChange<firebase.firestore.DocumentData>[],
+  empty: boolean
 ) => void;
 
 interface IFirebaseService {
-  getDatas: (callback: callback) => void;
+  getDatas: (callback: callback, limit?: number) => void;
   createData: ({ data }: any) => Promise<any>;
   deleteData: (id: string) => void;
 }
+interface ICafe {
+  city: string;
+  name: string;
+  createdAt: string;
+}
 
 export default function fireBaseService(collection: string): IFirebaseService {
-  const getDatas = (callback: callback) => {
-    db.collection(collection)
-      .orderBy("city")
+  let lastVisible: any = null;
+  const getDatas = (callback: callback, limit?: number) => {
+    return db
+      .collection(collection)
+      .orderBy("createdAt")
+      .startAfter(lastVisible)
+      .limit(limit)
       .onSnapshot((snapshot) => {
+        lastVisible = snapshot.docs[snapshot.docs.length - 1];
         let changes = snapshot.docChanges();
-        callback(changes);
+        const empty = snapshot.empty;
+        callback(changes, empty);
       });
   };
-  const createData = ({ ...data }: any) => {
+  const createData = ({ ...data }: ICafe) => {
     return new Promise((resolve, reject) => {
+      const { city, name, createdAt }: ICafe = data;
       db.collection(collection)
-        .add(data)
+        .add({
+          city,
+          name,
+          createdAt,
+        })
         .then((result) => {
           resolve(result);
         })
