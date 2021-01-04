@@ -1,5 +1,5 @@
 import { renderCafes, submitCafe } from "./cafes";
 
 // render cafe
-renderCafes();
+window.addEventListener("DOMContentLoaded", renderCafes);
 submitCafe();
